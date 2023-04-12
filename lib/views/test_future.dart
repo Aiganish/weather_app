@@ -8,19 +8,24 @@ class TestFuture extends StatefulWidget {
 }
 
 class _TestFutureState extends State<TestFuture> {
-  String text = 'Textti alip kell';
+  String text = 'Sunchronno  ishtedi';
   String? textAsync;
+
   @override
   void initState() {
     getText();
     super.initState();
   }
 
-  Future<void> getText() async {
-    await Future.delayed(Duration(seconds: 3), () {
-      return textAsync = 'Texr Async kele jatat';
-    });
-    setState(() {});
+  Future<String> getText() async {
+    try {
+      return await Future.delayed(Duration(seconds: 3), () {
+        setState(() {});
+        return textAsync = 'Texr Async keldi';
+      });
+    } catch (problem) {
+      throw Exception(problem);
+    }
   }
 
   @override
@@ -38,9 +43,7 @@ class _TestFutureState extends State<TestFuture> {
             ),
             Text(
               text,
-              style: TextStyle(
-                fontSize: 35,
-              ),
+              style: TextStyle(fontSize: 30),
             ),
             Text(
               'Salam',
