@@ -1,9 +1,41 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart';
+import 'package:weather_app/constants/api_keys/api_keys.dart';
 import 'package:weather_app/views/search_view.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  @override
+  void initState() {
+    showWeatherByLocation();
+    super.initState();
+  }
+
+  Future<void> showWeatherByLocation() async {
+    final position = await _getPosition();
+    await getWeather();
+    log('latitude==>${position.latitude}');
+    log('longitude==>${position.longitude}');
+  }
+
+  Future<void> getWeather() async {
+    final client = Client();
+    final url =
+        'https://api.openweathermap.org/data/2.5/weather?lat=37.421998333333335&lon=-122.084&appid=${ApiKeys.myApiKey}';
+    Uri uri = Uri.parse(url);
+    final joop = await client.get(uri);
+    log('response ==> ${joop.body}');
+  }
+
   Future<Position> _getPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
