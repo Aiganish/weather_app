@@ -4,7 +4,7 @@ class WeatherData {
     return data;
   }
 
-  String getDescription(num temp) {
+  String getDescription(double temp) {
     if (temp > 25) {
       return 'It\'s 🍦 time';
     } else if (temp > 20) {
@@ -16,15 +16,15 @@ class WeatherData {
     }
   }
 
-  String getWeatherIcon(num temp) {
-    if (temp > 20 - 25) {
-      return '☀️';
-    } else if (temp > 10 - 20) {
+  String getWeatherIcon(double kelvin) {
+    if (kelvin < 20) {
+      return '❄';
+    } else if (kelvin >= 10 - 20) {
       return '⛅';
-    } else if (temp < 0 - 10) {
+    } else if (kelvin < 0 - 10) {
       return '⛈️';
-    } else if (temp < -20 - 0) {
-      return '🌨️';
+    } else if (kelvin < -20 - -0) {
+      return '🌞';
     } else {
       return '🤷‍';
     }

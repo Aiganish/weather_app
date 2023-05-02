@@ -48,9 +48,10 @@ class _HomeViewState extends State<HomeView> {
       cityName = jsonjoop['name'];
       final double kelvin = jsonjoop['main']['temp'];
       tempreture = WeatherData().calculetWeather(kelvin);
-      description = WeatherData().getDescription(num.parse(tempreture));
+      Country = jsonjoop['sys']['country'];
+      description = WeatherData().getDescription(double.parse(tempreture));
 
-      icons = WeatherData().getWeatherIcon(num.parse(tempreture));
+      icons = WeatherData().getWeatherIcon(double.parse(tempreture));
 
       log('city name ===> ${jsonjoop['name']}');
 
@@ -78,8 +79,8 @@ class _HomeViewState extends State<HomeView> {
         Country = data['sys']['country'];
         final kelvin = data['main']['temp'];
         tempreture = WeatherData().calculetWeather(kelvin);
-        description = WeatherData().getDescription(num.parse(tempreture));
-        icons = WeatherData().getWeatherIcon(num.parse(tempreture));
+        description = WeatherData().getDescription(double.parse(tempreture));
+        icons = WeatherData().getWeatherIcon(kelvin);
         setState(() {});
       }
     } catch (e) {}
@@ -142,7 +143,7 @@ class _HomeViewState extends State<HomeView> {
           actions: [
             InkWell(
               onTap: () async {
-                final typedCityName = await Navigator.push(
+                final String typedCityName = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => SearchView(),
@@ -216,7 +217,7 @@ class _HomeViewState extends State<HomeView> {
                         description,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 58,
+                          fontSize: 38,
                           color: Colors.white,
                         ),
                       ),
@@ -235,7 +236,7 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     Positioned(
-                      top: 500,
+                      top: 600,
                       left: 30,
                       // right: 0,
                       child: Text(

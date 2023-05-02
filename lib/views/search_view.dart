@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class SearchView extends StatelessWidget {
   SearchView({super.key});
-  final _Controller = TextEditingController();
-  String? textName;
+  final _controller = TextEditingController();
+  // String? textName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,12 +23,12 @@ class SearchView extends StatelessWidget {
               horizontal: 30,
             ),
             child: TextFormField(
-              onChanged: (value) {
-                textName = value;
-                log('$textName');
-              },
+              // onChanged: (value) {
+              //   textName = value;
+              //   log('$textName');
+              // },
 
-              // controller: _Controller,
+              controller: _controller,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20,
@@ -67,8 +67,8 @@ class SearchView extends StatelessWidget {
               backgroundColor: MaterialStateProperty.all(Colors.cyan),
             ),
             onPressed: () {
-              if (_Controller.text.isNotEmpty) {
-                Navigator.pop(context, _Controller.text);
+              if (_controller.text.isNotEmpty) {
+                Navigator.pop(context, _controller.text);
               }
 
               FocusManager.instance.primaryFocus?.unfocus();
