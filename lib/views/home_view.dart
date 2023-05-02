@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/constants/api_keys/api_keys.dart';
+import 'package:weather_app/data/weather_data.dart';
 import 'package:weather_app/views/search_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -15,7 +16,11 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   String cityName = '';
+  String tempreture = '';
+  String icons = '';
   bool isLoading = false;
+  String Country = '';
+  String description = '';
   @override
   void initState() {
     showWeatherByLocation();
@@ -25,9 +30,6 @@ class _HomeViewState extends State<HomeView> {
   Future<void> showWeatherByLocation() async {
     final position = await _getPosition();
     await getWeather(position);
-
-    // log('lgetSearchedCityNameatitude==>${position.latitude}');
-    // log('longitude==>${position.longitude}');
   }
 
   Future<void> getWeather(Position position) async {
@@ -44,15 +46,19 @@ class _HomeViewState extends State<HomeView> {
       final joop = await client.get(uri);
       final jsonjoop = jsonDecode(joop.body);
       cityName = jsonjoop['name'];
+      final double kelvin = jsonjoop['main']['temp'];
+      tempreture = WeatherData().calculetWeather(kelvin);
+      description = WeatherData().getDescription(num.parse(tempreture));
+
+      icons = WeatherData().getWeatherIcon(num.parse(tempreture));
+
       log('city name ===> ${jsonjoop['name']}');
 
       setState(() {
         isLoading = false;
       });
-
-      // log('response ==> ${joop.body}');
-      //log('response json ==> ${jsonjoop}');
     } catch (e) {
+      log('$e');
       throw Exception(e);
     }
   }
@@ -69,6 +75,11 @@ class _HomeViewState extends State<HomeView> {
         final data = jsonDecode(response.body);
         log('data ===> $data');
         cityName = data['name'];
+        Country = data['sys']['country'];
+        final kelvin = data['main']['temp'];
+        tempreture = WeatherData().calculetWeather(kelvin);
+        description = WeatherData().getDescription(num.parse(tempreture));
+        icons = WeatherData().getWeatherIcon(num.parse(tempreture));
         setState(() {});
       }
     } catch (e) {}
@@ -131,7 +142,7 @@ class _HomeViewState extends State<HomeView> {
           actions: [
             InkWell(
               onTap: () async {
-                final String typedCityName = await Navigator.push(
+                final typedCityName = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => SearchView(),
@@ -156,17 +167,19 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
           child: isLoading == true
-              ? SizedBox(
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: CircularProgressIndicator(color: Colors.red))
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.red,
+                    backgroundColor: Colors.green,
+                  ),
+                )
               : Stack(
                   children: [
                     Positioned(
                       top: 100,
                       left: 140,
                       child: Text(
-                        '⛅',
+                        icons,
                         style: TextStyle(
                           fontSize: 60,
                           color: Colors.white,
@@ -177,9 +190,20 @@ class _HomeViewState extends State<HomeView> {
                       top: 130,
                       left: 40,
                       child: Text(
-                        '8\u2103',
+                        '$tempreture\u2103',
                         style: TextStyle(
                           fontSize: 60,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 50,
+                      left: 40,
+                      child: Text(
+                        'Country:$Country',
+                        style: TextStyle(
+                          fontSize: 30,
                           color: Colors.white,
                         ),
                       ),
@@ -189,7 +213,7 @@ class _HomeViewState extends State<HomeView> {
                       left: 0,
                       right: 50,
                       child: Text(
-                        'Eshik issik  \n jenil kiin',
+                        description,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 58,
