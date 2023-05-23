@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/views/home_view.dart';
-import 'package:weather_app/views/search_view.dart';
-import 'package:weather_app/views/test_future.dart';
+import 'package:get/get.dart';
+import 'package:weather_app/modules/home/view/home_view.dart';
+import 'package:weather_app/modules/search/view/search_view.dart';
 
 void main() {
   runApp(const WeatherApp());
@@ -12,7 +12,7 @@ class WeatherApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomeView(),
     );

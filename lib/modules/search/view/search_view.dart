@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SearchView extends StatelessWidget {
   SearchView({super.key});
@@ -68,11 +67,10 @@ class SearchView extends StatelessWidget {
             ),
             onPressed: () {
               if (_controller.text.isNotEmpty) {
-                Navigator.pop(context, _controller.text);
+                Get.back(result: _controller.text);
               }
 
               FocusManager.instance.primaryFocus?.unfocus();
-              // log('${_Controller.text}');
             },
             child: Text(
               'Shaardy tap',
