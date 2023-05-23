@@ -7,11 +7,13 @@ import 'package:weather_app/modules/home/services/geo_location_service.dart';
 import '../../../constants/api_keys/api_keys.dart';
 import '../../../data/local/weather_data.dart';
 
-class HomeController extends GetxController {
+class HomeController extends GetxController with StateMixin {
   RxString cityName = ''.obs;
   RxString tempreture = ''.obs;
   RxString icons = ''.obs;
   RxBool isLoading = false.obs;
+  //RxStatus? isLoading1 = RxStatus.loading();
+  //RxBool isLoading = false.obs;
   RxString Country = ''.obs;
   RxString description = ''.obs;
 
@@ -27,8 +29,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> getWeather(Position position) async {
+    // isLoading.value = true;
     isLoading.value = true;
-    // RxStatus.loading();
 
     try {
       final client = http.Client();
@@ -49,7 +51,6 @@ class HomeController extends GetxController {
 
       log('city name ===> ${jsonjoop['name']}');
       isLoading.value = false;
-      // RxStatus.success();
     } catch (e) {
       log('$e');
       throw Exception(e);
